@@ -25,7 +25,7 @@ LOCAL_PATH := device/tp-link/tp702a
 TARGET_NO_BOOTLOADER := false
 
 TARGET_BOARD_PLATFORM := mt6753
-#TARGET_BOARD_PLATFORM_GPU := Mali-T720
+TARGET_BOARD_PLATFORM_GPU := Mali-T720
 #TARGET_BOOTLOADER_BOARD_NAME :=
 TARGET_IS_64_BIT := true
 TARGET_BOARD_SUFFIX := _64
@@ -46,7 +46,8 @@ TARGET_2ND_ARCH := arm
 TARGET_2ND_ARCH_VARIANT := armv7-a-neon
 TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
-TARGET_2ND_CPU_VARIANT := cortex-a53
+#TARGET_2ND_CPU_VARIANT := cortex-a53
+TARGET_2ND_CPU_VARIANT := generic
 
 # Architecture Extensions
 ARCH_ARM_HAVE_TLS_REGISTER := true
@@ -109,10 +110,10 @@ BOARD_CACHEIMAGE_PARTITION_SIZE    :=  0x19000000 # (400 MiB)
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 0x28677c000 # Enctypted footer included (-16384): 0x286780000-0x4000
 BOARD_FLASH_BLOCK_SIZE := 131072                  # (BOARD_KERNEL_PAGESIZE * 64)
 TARGET_USERIMAGES_USE_EXT4 := true
-#TARGET_USERIMAGES_USE_F2FS := true
-TW_INCLUDE_NTFS_3G := false
-#TW_NO_EXFAT := false
-#TW_NO_EXFAT_FUSE := false
+TARGET_USERIMAGES_USE_F2FS := true
+TW_INCLUDE_NTFS_3G := true
+TW_NO_EXFAT := false
+TW_NO_EXFAT_FUSE := false
 # Use this flag if the board has an EXT4 partition larger than 2 GiB
 BOARD_HAS_LARGE_FILESYSTEM := true
 
@@ -133,24 +134,24 @@ BOARD_SEPOLICY_DIRS += \
 RED_LED_PATH := "/sys/class/leds/red/brightness"
 GREEN_LED_PATH := "/sys/class/leds/green/brightness"
 #CHARGING_ENABLED_PATH :=
-#BOARD_CHARGER_ENABLE_SUSPEND := true
+BOARD_CHARGER_ENABLE_SUSPEND := true
 
 # Init of the devices boots under 1s but just in case it is hot and charging...
 #TARGET_INCREASES_COLDBOOT_TIMEOUT := true
 
 ### Recovery
 TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/recovery.fstab
-#TARGET_RECOVERY_PIXEL_FORMAT := "RGB_565"
-#TARGET_RECOVERY_PIXEL_FORMAT := "RGBA_8888"
+# BGRA_8888, RGBA_8888, RGBX_8888, RGB_565
+TARGET_RECOVERY_PIXEL_FORMAT := "RGBA_8888"
 BOARD_SUPPRESS_SECURE_ERASE := true
 RECOVERY_VARIANT := twrp
 
 ### TWRP
 RECOVERY_GRAPHICS_USE_LINELENGTH := true
-TARGET_USE_CUSTOM_LUN_FILE_PATH :=  /sys/devices/platform/mt_usb/musb-hdrc.0/gadget/lun%d/file
+TARGET_USE_CUSTOM_LUN_FILE_PATH :=  /sys/devices/platform/mt_usb/musb-hdrc.0.auto/gadget/lun%d/file
 TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
 TW_MAX_BRIGHTNESS := 255
-TW_DEFAULT_BRIGHTNESS := 55
+TW_DEFAULT_BRIGHTNESS := 10
 #TW_NO_SCREEN_TIMEOUT := false
 #TW_NO_SCREEN_BLANK := false
 TW_NEVER_UNMOUNT_SYSTEM := true
@@ -159,7 +160,7 @@ TW_DEFAULT_LANGUAGE := en
 #TW_EXCLUDE_SUPERSU := false
 #TW_NO_REBOOT_BOOTLOADER := false
 #TW_NO_REBOOT_RECOVERY := false
-TW_HAS_DOWNLOAD_MODE := true
+TW_HAS_DOWNLOAD_MODE := false
 #TW_NO_BATT_PERCENT := false
 #TW_NO_CPU_TEMP := false
 TW_MTP_DEVICE := "/dev/mtp_usb"
