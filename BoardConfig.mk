@@ -51,6 +51,7 @@ TARGET_2ND_CPU_VARIANT := generic
 
 # Architecture Extensions
 ARCH_ARM_HAVE_TLS_REGISTER := true
+# Make sure SMP is enabled in the kernel config (CONFIG_SMP=y)
 TARGET_CPU_SMP := true
 ARCH_ARM_HAVE_NEON := true
 ARCH_ARM_HAVE_VFP := true
@@ -98,8 +99,10 @@ TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/kernel
 
 
 ### Encryption
-TW_INCLUDE_CRYPTO := true
 TARGET_HW_DISK_ENCRYPTION := false
+TW_INCLUDE_CRYPTO := true
+# Remove the ability to encrypt backups with a password
+TW_EXCLUDE_ENCRYPTED_BACKUPS := false
 
 ### Partitions
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
@@ -110,13 +113,13 @@ BOARD_CACHEIMAGE_PARTITION_SIZE    :=  0x19000000 # (400 MiB)
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 0x28677c000 # Enctypted footer included (-16384): 0x286780000-0x4000
 BOARD_FLASH_BLOCK_SIZE := 131072                  # (BOARD_KERNEL_PAGESIZE * 64)
 TARGET_USERIMAGES_USE_EXT4 := true
+# Include F2FS support. Make sure your kernel supports F2FS!
 TARGET_USERIMAGES_USE_F2FS := true
 TW_INCLUDE_NTFS_3G := true
 TW_NO_EXFAT := false
 TW_NO_EXFAT_FUSE := false
 # Use this flag if the board has an EXT4 partition larger than 2 GiB
 BOARD_HAS_LARGE_FILESYSTEM := true
-
 
 ### Logs
 TARGET_USES_LOGD := true
@@ -135,14 +138,15 @@ RED_LED_PATH := "/sys/class/leds/red/brightness"
 GREEN_LED_PATH := "/sys/class/leds/green/brightness"
 #CHARGING_ENABLED_PATH :=
 BOARD_CHARGER_ENABLE_SUSPEND := true
+BOARD_CHARGER_SHOW_PERCENTAGE := true
 
 # Init of the devices boots under 1s but just in case it is hot and charging...
-#TARGET_INCREASES_COLDBOOT_TIMEOUT := true
+TARGET_INCREASES_COLDBOOT_TIMEOUT := true
 
 ### Recovery
 TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/recovery.fstab
 # BGRA_8888, RGBA_8888, RGBX_8888, RGB_565
-TARGET_RECOVERY_PIXEL_FORMAT := "RGBA_8888"
+#TARGET_RECOVERY_PIXEL_FORMAT := "RGBA_8888"
 BOARD_SUPPRESS_SECURE_ERASE := true
 RECOVERY_VARIANT := twrp
 
@@ -155,25 +159,52 @@ TW_DEFAULT_BRIGHTNESS := 10
 #TW_NO_SCREEN_TIMEOUT := false
 #TW_NO_SCREEN_BLANK := false
 TW_NEVER_UNMOUNT_SYSTEM := true
+# Set to true in order to enable localization
 TW_EXTRA_LANGUAGES := true
 TW_DEFAULT_LANGUAGE := en
-#TW_EXCLUDE_SUPERSU := false
-#TW_NO_REBOOT_BOOTLOADER := false
-#TW_NO_REBOOT_RECOVERY := false
+# Exclude SuperSu e.g. to save some space or for different other reasons
+TW_EXCLUDE_SUPERSU := false
+# Removes the "Bootloader" button from the "Reboot" menu
+TW_NO_REBOOT_BOOTLOADER := false
+# Removes the "Recovery" button from the Reboot menu
+TW_NO_REBOOT_RECOVERY := false
+# Removes the "Mount USB Storage" button  from the "Mount" menu on devices that don't support the
+# USB storage
+TW_NO_USB_STORAGE := false
+# Add an option in the "Reboot" menu to reboot into Download Mode (for Samsung devices)
 TW_HAS_DOWNLOAD_MODE := false
 #TW_NO_BATT_PERCENT := false
-#TW_NO_CPU_TEMP := false
+# Some devices don't have a temp sensor. Disable in such case to stop spamming the recovery log
+TW_NO_CPU_TEMP := false
+
+TW_HAS_NO_BOOT_PARTITION := false
+TW_HAS_NO_RECOVERY_PARTITION := false
+
+# MTP support
+#TW_EXCLUDE_MTP := true
+# Specify a custom device name for MTP
 TW_MTP_DEVICE := "/dev/mtp_usb"
+
 TW_CUSTOM_CPU_TEMP_PATH := /sys/class/thermal/thermal_zone1/temp
 TW_HAS_USB_STORAGE := true
 # For people who would want to have ToyBox rather than Busybox
 TW_USE_TOOLBOX := false
+# TWRP backup folder is named after the "Serial" entry in the /proc/cpuinfo file. Some devices
+# don't show their serial number in that file and the "Serial" entry shows "0000000000000000". By
+# using this flag, TWRP will use "ro.product.model" as the folder name instead.
 TW_USE_MODEL_HARDWARE_ID_FOR_DEVICE_ID := true
 # An awesome way to take screenshots. Back-end improvement, no noticeable user side changes.
 # Screenshots work without it too
 TW_INCLUDE_FB2PNG := true
 
+# BOARD_HAS_NO_REAL_SDCARD when "true" disables things like sdcard partitioning and may save you
+# some space if TWRP isn't fitting in your recovery patition
 BOARD_HAS_NO_REAL_SDCARD := false
+# RECOVERY_SDCARD_ON_DATA when "true" enables proper handling of /data/media on devices that have
+# this folder for storage (most Honeycomb and devices that originally shipped with ICS like Galaxy
+# Nexus) This flag is not required for these types of devices though. If you do not define this
+# flag and also do not include any references to /sdcard, /internal_sd, /internal_sdcard, or /emmc
+# in your fstab, then we will automatically assume that the device is using emulated storage.
 RECOVERY_SDCARD_ON_DATA := true
 
 #TW_INTERNAL_STORAGE_PATH := "/data/media"
@@ -181,11 +212,14 @@ RECOVERY_SDCARD_ON_DATA := true
 #TW_EXTERNAL_STORAGE_PATH := "/sdcard1"
 #TW_EXTERNAL_STORAGE_MOUNT_POINT := "sdcard1"
 
-#
-# portrait_mdpi  = 320x480 480x800 480x854 540x960
-# portrait_hdpi  = 720x1280 800x1280 1080x1920 1200x1920 1440x2560 1600x2560
-# watch_mdpi     = 240x240 280x280 320x320
-# landscape_mdpi = 800x480 1024x600 1024x768
-# landscape_hdpi = 1280x800 1920x1200 2560x1600
-TW_THEME := portrait_hdpi
+# This TW_THEME flag replaces the older DEVICE_RESOLUTION flag. TWRP now uses scaling to stretch
+# any theme to fit the screen resolution. There are currently 5 settings which are:
+#   portrait_mdpi  = 320x480 480x800 480x854 540x960
+#   portrait_hdpi  = 720x1280 800x1280 1080x1920 1200x1920 1440x2560 1600x2560
+#   watch_mdpi     = 240x240 280x280 320x320
+#   landscape_mdpi = 800x480 1024x600 1024x768
+#   landscape_hdpi = 1280x800 1920x1200 2560x1600
+TW_THEME := portrait_mdpi
 TWRP_NEW_THEME := true
+#TW_CUSTOM_THEME  := /some/path/
+
