@@ -49,7 +49,7 @@ TARGET_2ND_CPU_ABI2 := armeabi
 #TARGET_2ND_CPU_VARIANT := cortex-a53
 TARGET_2ND_CPU_VARIANT := generic
 
-# Architecture Extensions
+# Architecture Extensions (read these from the /proc/cpuinfo file)
 ARCH_ARM_HAVE_TLS_REGISTER := true
 # Make sure SMP is enabled in the kernel config (CONFIG_SMP=y)
 TARGET_CPU_SMP := true
@@ -101,8 +101,6 @@ TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/kernel
 ### Encryption
 TARGET_HW_DISK_ENCRYPTION := false
 TW_INCLUDE_CRYPTO := true
-# Remove the ability to encrypt backups with a password
-TW_EXCLUDE_ENCRYPTED_BACKUPS := false
 
 ### Partitions
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
@@ -114,7 +112,7 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 0x28677c000 # Enctypted footer included (-
 BOARD_FLASH_BLOCK_SIZE := 131072                  # (BOARD_KERNEL_PAGESIZE * 64)
 TARGET_USERIMAGES_USE_EXT4 := true
 # Include F2FS support. Make sure your kernel supports F2FS!
-TARGET_USERIMAGES_USE_F2FS := true
+TARGET_USERIMAGES_USE_F2FS := false
 TW_INCLUDE_NTFS_3G := true
 TW_NO_EXFAT := false
 TW_NO_EXFAT_FUSE := false
@@ -169,7 +167,7 @@ TW_NO_REBOOT_BOOTLOADER := false
 # Removes the "Recovery" button from the Reboot menu
 TW_NO_REBOOT_RECOVERY := false
 # Removes the "Mount USB Storage" button  from the "Mount" menu on devices that don't support the
-# USB storage
+# USB storage. USB Mass Storage is only supported if explicitly enabled in the kernel.
 TW_NO_USB_STORAGE := false
 # Add an option in the "Reboot" menu to reboot into Download Mode (for Samsung devices)
 TW_HAS_DOWNLOAD_MODE := false
@@ -189,10 +187,6 @@ TW_CUSTOM_CPU_TEMP_PATH := /sys/class/thermal/thermal_zone1/temp
 TW_HAS_USB_STORAGE := true
 # For people who would want to have ToyBox rather than Busybox
 TW_USE_TOOLBOX := false
-# TWRP backup folder is named after the "Serial" entry in the /proc/cpuinfo file. Some devices
-# don't show their serial number in that file and the "Serial" entry shows "0000000000000000". By
-# using this flag, TWRP will use "ro.product.model" as the folder name instead.
-TW_USE_MODEL_HARDWARE_ID_FOR_DEVICE_ID := true
 # An awesome way to take screenshots. Back-end improvement, no noticeable user side changes.
 # Screenshots work without it too
 TW_INCLUDE_FB2PNG := true
@@ -223,3 +217,15 @@ TW_THEME := portrait_mdpi
 TWRP_NEW_THEME := true
 #TW_CUSTOM_THEME  := /some/path/
 
+### Backup
+# TWRP backup folder is named after the "Serial" entry in the /proc/cpuinfo file. Some devices
+# don't show their serial number in that file and the "Serial" entry shows "0000000000000000". By
+# using this flag, TWRP will use "ro.product.model" as the folder name instead.
+TW_USE_MODEL_HARDWARE_ID_FOR_DEVICE_ID := true
+# Remove the ability to encrypt backups with a password
+TW_EXCLUDE_ENCRYPTED_BACKUPS := false
+# The backup of /data/ doesn't include the /data/media/ directory, which contains a lot of user's
+# files (images, photos, movies, etc). This options ensures that the backup file will have all of
+# the user's data when backed to an external storage.
+# -- https://twrp.me/faq/datamedia.html
+#TW_BACKUP_DATA_MEDIA := ture
