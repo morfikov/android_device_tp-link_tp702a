@@ -32,6 +32,6 @@ $(call inherit-product, device/tp-link/tp702a/device.mk)
 PRODUCT_NAME := omni_tp702a
 PRODUCT_DEVICE := tp702a
 PRODUCT_BRAND := Neffos
-PRODUCT_MODEL := Neffos C5 MAX
+PRODUCT_MODEL := Neffos C5 Max
 PRODUCT_MANUFACTURER := TP-LINK
 PRODUCT_LOCALES := en_US

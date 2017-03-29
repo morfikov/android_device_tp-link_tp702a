@@ -20,3 +20,10 @@ PRODUCT_AAPT_PREF_CONFIG := hdpi
 # Time Zone data Credits to desalesouche => http://forum.xda-developers.com/showpost.php?p=64850444&postcount=1204
 PRODUCT_COPY_FILES += \
 	bionic/libc/zoneinfo/tzdata:recovery/root/system/usr/share/zoneinfo/tzdata
+
+# Because existing update ZIPs for the phone seem to check "ro.product.device" or "ro.build.product"
+# and they're not matching the default 'tp702a' target, force them to be C5_Max.
+PRODUCT_BUILD_PROP_OVERRIDES += \
+	PRODUCT_NAME=C5_Max \
+	TARGET_DEVICE=C5_Max \
+	TARGET_BOOTLOADER_BOARD_NAME=C5_Max
