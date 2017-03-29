@@ -193,7 +193,7 @@ TW_INCLUDE_FB2PNG := true
 
 # BOARD_HAS_NO_REAL_SDCARD when "true" disables things like sdcard partitioning and may save you
 # some space if TWRP isn't fitting in your recovery patition
-BOARD_HAS_NO_REAL_SDCARD := false
+#BOARD_HAS_NO_REAL_SDCARD := false
 # RECOVERY_SDCARD_ON_DATA when "true" enables proper handling of /data/media on devices that have
 # this folder for storage (most Honeycomb and devices that originally shipped with ICS like Galaxy
 # Nexus) This flag is not required for these types of devices though. If you do not define this
