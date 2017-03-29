@@ -14,7 +14,7 @@ Storage | 16 GB
 MicroSD | Up to 32 GB
 Battery | 3045 mAh
 Dimensions | 152 x 76 x 8.95 mm
-Display | 1920 x 1080 pixels 5.5"
+Display | 1920 x 1080 pixels 5.5" (403.4 PPI )
 Rear Camera  | 13.0 MP
 Front Camera | 5.0 MP
 Release Date | January 2016
@@ -30,35 +30,35 @@ TWRP Functional Checklist
 =====================================
 
 Blocking checks
-- [ ] Correct screen/recovery size
-- [ ] Working Touch, screen
-- [ ] Backup to internal/microSD
-- [ ] Restore from internal/microSD
-- [ ] reboot to system
-- [ ] ADB
+- [x] Correct screen/recovery size
+- [x] Working Touch, screen
+- [x] Backup to internal/microSD
+- [x] Restore from internal/microSD
+- [x] reboot to system
+- [x] ADB
 
 Medium checks
 - [x] update.zip sideload
-- [ ] UI colors (red/blue inversions)
-- [ ] Screen goes off and on
-- [ ] F2FS/EXT4 Support, exFAT/NTFS where supported
-- [ ] all important partitions listed in mount/backup lists
-- [ ] backup/restore to/from external (USB-OTG) storage
+- [x] UI colors (red/blue inversions)
+- [x] Screen goes off and on
+- [x] F2FS/EXT4 Support, exFAT/NTFS where supported
+- [x] all important partitions listed in mount/backup lists
+- [x] backup/restore to/from external (USB-OTG) storage
 - [ ] backup/restore to/from adb (https://gerrit.omnirom.org/#/c/15943/)
 - [x] decrypt /data
-- [ ] Correct date
+- [x] Correct date
 
 Minor checks
-- [ ] MTP export
-- [ ] reboot to bootloader
-- [ ] reboot to recovery
-- [ ] poweroff
-- [ ] battery level
-- [ ] temperature
-- [ ] encrypted backups (https://forum.xda-developers.com/showthread.php?t=2011811)
-- [ ] input devices via USB (USB-OTG) - keyboard, mouse
-- [ ] USB mass storage export
-- [ ] set brightness
-- [ ] vibrate
-- [ ] screenshot
-- [ ] partition SD card
+- [x] MTP export
+- [x] reboot to bootloader
+- [x] reboot to recovery
+- [x] poweroff
+- [x] battery level
+- [x] temperature
+- [x] encrypted backups
+- [x] input devices via USB (USB-OTG) - keyboard, mouse and disks
+- [x] USB mass storage export
+- [x] set brightness
+- [x] vibrate
+- [x] screenshot
+- [x] partition SD card
