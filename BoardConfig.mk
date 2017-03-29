@@ -213,7 +213,7 @@ RECOVERY_SDCARD_ON_DATA := true
 #   watch_mdpi     = 240x240 280x280 320x320
 #   landscape_mdpi = 800x480 1024x600 1024x768
 #   landscape_hdpi = 1280x800 1920x1200 2560x1600
-TW_THEME := portrait_mdpi
+TW_THEME := portrait_hdpi
 TWRP_NEW_THEME := true
 #TW_CUSTOM_THEME  := /some/path/
 
