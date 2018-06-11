@@ -1,3 +1,5 @@
+# This project has been permanently moved to [gitlab](https://gitlab.com/morfikov/android_device_tp-link_tp702a). It will no longer be maintained here. Please, refer to [gitlab](https://gitlab.com/morfikov/android_device_tp-link_tp702a) repository for updates.
+
 TeamWin Recovery Project
 
 Device configuration for TP-LINK Neffos C5 MAX (TP702A)
